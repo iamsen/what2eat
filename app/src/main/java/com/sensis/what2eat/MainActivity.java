@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.sensis.what2eat.db.TaskContract;
 import com.sensis.what2eat.db.TaskDBHelper;
 
+import java.util.Random;
+
 
 public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_MESSAGE = "com.sensis.what2eat.MESSAGE";
@@ -36,8 +38,7 @@ public class MainActivity extends ActionBarActivity {
     private void updateUI() {
         helper = new TaskDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(TaskContract.TABLE,
-                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK},
+        Cursor cursor = sqlDB.query(TaskContract.TABLE, new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK},
                 null, null, null, null, null);
 
         listAdapter = new SimpleCursorAdapter(
@@ -63,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_add_task:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Add a task");
+                builder.setTitle("Add a Place");
                 builder.setMessage("What is the name of the place?");
                 final EditText inputField = new EditText(this);
                 builder.setView(inputField);
@@ -88,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
 
                 builder.setNegativeButton("Cancel", null);
 
-                builder.create().show();
+                builder.show();
                 return true;
 
             default:
@@ -97,10 +98,28 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onReady2EatButtonClick(View view) {
+        SQLiteDatabase db = new TaskDBHelper(MainActivity.this).getReadableDatabase();
+        Cursor cursor = db.query(TaskContract.TABLE, new String[]{TaskContract.Columns.TASK}, null, null, null, null, null);
+        int numPlaces = cursor.getCount();
+
+        if (numPlaces < 1) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Can't generate the result...")
+                    .setMessage("Please enter at least one place...")
+                    .setPositiveButton("OK", null)
+                    .show();
+            return;
+        }
+
+        int pickedIndex = randInt(1, numPlaces);
+        assert (pickedIndex >= 1);
+        cursor.moveToFirst();
+        cursor.move(pickedIndex - 1);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("This is the place to try today!")
-                .setMessage("hello")
-                .setNegativeButton("OK", null)
+                .setMessage(cursor.getString(0))
+                .setPositiveButton("OK", null)
                 .show();
     }
 
@@ -115,11 +134,23 @@ public class MainActivity extends ActionBarActivity {
                 TaskContract.Columns.TASK,
                 task);
 
-
         helper = new TaskDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
+    }
+
+    public static int randInt(int min, int max) {
+
+        // NOTE: Usually this should be a field rather than a method
+        // variable so that it is not re-seeded every call.
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
     }
 
 }

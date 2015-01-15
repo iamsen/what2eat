@@ -17,10 +17,8 @@ public class TaskDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery =
-                String.format("CREATE TABLE %s (" +
-                                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "%s TEXT)", TaskContract.TABLE,
-                        TaskContract.Columns.TASK);
+                String.format("CREATE TABLE %s ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                "%s TEXT)", TaskContract.TABLE, TaskContract.Columns.TASK);
 
         Log.d("TaskDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
@@ -28,7 +26,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqlDB, int i, int i2) {
-        sqlDB.execSQL("DROP TABLE IF EXISTS "+TaskContract.TABLE);
+        sqlDB.execSQL("DROP TABLE IF EXISTS " + TaskContract.TABLE);
         onCreate(sqlDB);
     }
 }
