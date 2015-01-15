@@ -1,7 +1,6 @@
 package com.sensis.what2eat;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -27,7 +26,6 @@ public class MainActivity extends ActionBarActivity {
     private TaskDBHelper helper;
     private ListAdapter listAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +38,14 @@ public class MainActivity extends ActionBarActivity {
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
         Cursor cursor = sqlDB.query(TaskContract.TABLE,
                 new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK},
-                null,null,null,null,null);
+                null, null, null, null, null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.task_view,
                 cursor,
-                new String[] { TaskContract.Columns.TASK},
-                new int[] { R.id.taskTextView},
+                new String[]{TaskContract.Columns.TASK},
+                new int[]{R.id.taskTextView},
                 0
         );
         ListView listView = (ListView) findViewById(R.id.list);
@@ -66,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_add_task:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Add a task");
-                builder.setMessage("What do you want to do?");
+                builder.setMessage("What is the name of the place?");
                 final EditText inputField = new EditText(this);
                 builder.setView(inputField);
                 builder.setPositiveButton("Add",
@@ -98,6 +96,14 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void onReady2EatButtonClick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("This is the place to try today!")
+                .setMessage("hello")
+                .setNegativeButton("OK", null)
+                .show();
+    }
+
 
     public void onDoneButtonClick(View view) {
         View v = (View) view.getParent();
@@ -115,4 +121,5 @@ public class MainActivity extends ActionBarActivity {
         sqlDB.execSQL(sql);
         updateUI();
     }
+
 }
