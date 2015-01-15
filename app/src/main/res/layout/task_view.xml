@@ -23,7 +23,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="Edit"
+        android:id="@+id/editButton"
+        android:onClick="onEditButtonClick"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/doneButton"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
         android:id="@+id/doneButton"
         android:onClick="onDoneButtonClick"
         android:layout_alignParentTop="true"

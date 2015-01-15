@@ -3,6 +3,7 @@ package com.sensis.what2eat;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -140,8 +141,16 @@ public class MainActivity extends ActionBarActivity {
         updateUI();
     }
 
-    public static int randInt(int min, int max) {
+    public void onEditButtonClick(View view) {
+        View v = (View) view.getParent();
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        TextView taskTextView = (TextView) v.findViewById(R.id.taskTextView);
+        String message = taskTextView.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
 
+    public static int randInt(int min, int max) {
         // NOTE: Usually this should be a field rather than a method
         // variable so that it is not re-seeded every call.
         Random rand = new Random();
