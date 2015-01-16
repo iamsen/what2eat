@@ -30,12 +30,13 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        helper = TaskDBHelper.getInstance(MainActivity.this);
         setContentView(R.layout.activity_main);
         updateUI();
     }
 
     private void updateUI() {
-        Cursor cursor = new TaskDBHelper(MainActivity.this).getAllTaskNamesAndIds();
+        Cursor cursor = helper.getAllTaskNamesAndIds();
 
         listAdapter = new SimpleCursorAdapter(
                 this,
@@ -70,30 +71,27 @@ public class MainActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String taskName = inputField.getText().toString();
 //                                Log.d("MainActivity", taskName);
-                                if (taskName.equals("")) {
+                                if (taskName.trim().equals("")) {
                                     new AlertDialog.Builder(MainActivity.this)
                                             .setTitle("Name can not be empty...")
                                             .setPositiveButton("OK", null)
                                             .show();
                                     return;
                                 }
-                                new TaskDBHelper(MainActivity.this).insertItem(taskName);
+                                helper.insertItem(taskName.trim());
                                 updateUI();
                             }
                         });
-
                 builder.setNegativeButton("Cancel", null);
-
                 builder.show();
                 return true;
-
             default:
                 return false;
         }
     }
 
     public void onReady2EatButtonClick(View view) {
-        Cursor cursor = new TaskDBHelper(MainActivity.this).getAllTaskNames();
+        Cursor cursor = helper.getAllTaskNames();
         int numPlaces = cursor.getCount();
 
         if (numPlaces < 1) {
@@ -111,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
         cursor.move(pickedIndex - 1);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("This is the place to try today!")
+        builder.setTitle("This is the place to go today!")
                 .setMessage(cursor.getString(0))
                 .setPositiveButton("OK", null)
                 .show();
