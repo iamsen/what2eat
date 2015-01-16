@@ -41,7 +41,6 @@ public class EditTaskActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemId = item.getItemId();
 
-
         if (menuItemId == R.id.action_delete) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("DELETE")
@@ -50,8 +49,7 @@ public class EditTaskActivity extends ActionBarActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             TaskDBHelper helper = new TaskDBHelper(EditTaskActivity.this);
-                            Cursor c = helper.getOneTask(id);
-                            helper.deleteItem(c.getString(0));
+                            helper.deleteItem(helper.getOneTask(id).getId());
                             Intent intent = new Intent(EditTaskActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
