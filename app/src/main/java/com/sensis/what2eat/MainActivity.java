@@ -1,11 +1,9 @@
 package com.sensis.what2eat;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -26,6 +24,7 @@ import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_MESSAGE = "com.sensis.what2eat.MESSAGE";
+    public final static String EXTRA_ID = "com.sensis.what2eat.ID";
     private TaskDBHelper helper;
     private ListAdapter listAdapter;
 
@@ -37,19 +36,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateUI() {
-        helper = new TaskDBHelper(MainActivity.this);
-        SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(TaskContract.TABLE, new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK},
-                null, null, null, null, null);
+        Cursor cursor = new TaskDBHelper(MainActivity.this).getAllTaskNamesAndIds();
 
         listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.task_view,
                 cursor,
-                new String[]{TaskContract.Columns.TASK},
-                new int[]{R.id.taskTextView},
-                0
-        );
+                new String[]{TaskContract.Columns.TASK, TaskContract.Columns._ID},
+                new int[]{R.id.taskTextView, R.id.idHolder},
+                0);
+
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(listAdapter);
     }
@@ -73,17 +69,10 @@ public class MainActivity extends ActionBarActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                String task = inputField.getText().toString();
-                                Log.d("MainActivity", task);
+                                String taskName = inputField.getText().toString();
+                                Log.d("MainActivity", taskName);
 
-                                helper = new TaskDBHelper(MainActivity.this);
-                                SQLiteDatabase db = helper.getWritableDatabase();
-                                ContentValues values = new ContentValues();
-
-                                values.clear();
-                                values.put(TaskContract.Columns.TASK, task);
-
-                                db.insertWithOnConflict(TaskContract.TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                                new TaskDBHelper(MainActivity.this).insertItem(taskName);
                                 updateUI();
                             }
                         });
@@ -99,8 +88,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onReady2EatButtonClick(View view) {
-        SQLiteDatabase db = new TaskDBHelper(MainActivity.this).getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TABLE, new String[]{TaskContract.Columns.TASK}, null, null, null, null, null);
+        Cursor cursor = new TaskDBHelper(MainActivity.this).getAllTaskNames();
         int numPlaces = cursor.getCount();
 
         if (numPlaces < 1) {
@@ -124,29 +112,11 @@ public class MainActivity extends ActionBarActivity {
                 .show();
     }
 
-
-    public void onDoneButtonClick(View view) {
-        View v = (View) view.getParent();
-        TextView taskTextView = (TextView) v.findViewById(R.id.taskTextView);
-        String task = taskTextView.getText().toString();
-
-        String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                TaskContract.TABLE,
-                TaskContract.Columns.TASK,
-                task);
-
-        helper = new TaskDBHelper(MainActivity.this);
-        SQLiteDatabase sqlDB = helper.getWritableDatabase();
-        sqlDB.execSQL(sql);
-        updateUI();
-    }
-
     public void onEditButtonClick(View view) {
         View v = (View) view.getParent();
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        TextView taskTextView = (TextView) v.findViewById(R.id.taskTextView);
-        String message = taskTextView.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        TextView taskTextView = (TextView) v.findViewById(R.id.idHolder);
+        intent.putExtra(EXTRA_ID, taskTextView.getText().toString());
         startActivity(intent);
     }
 
