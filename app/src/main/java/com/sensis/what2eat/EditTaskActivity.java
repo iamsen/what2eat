@@ -26,9 +26,7 @@ public class EditTaskActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         id = intent.getStringExtra(MainActivity.EXTRA_ID);
-
         setContentView(R.layout.edit_task_view);
-
     }
 
 
@@ -67,18 +65,12 @@ public class EditTaskActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onDoneButtonClick(View view) {
-        View v = (View) view.getParent();
-        TextView taskTextView = (TextView) v.findViewById(R.id.taskTextView);
-        String task = taskTextView.getText().toString();
+    public void onSaveButtonClick(View view) {
 
-        String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                TaskContract.TABLE,
-                TaskContract.Columns.TASK,
-                task);
+    }
 
-        TaskDBHelper helper = new TaskDBHelper(EditTaskActivity.this);
-        SQLiteDatabase sqlDB = helper.getWritableDatabase();
-        sqlDB.execSQL(sql);
+    public void onCancelButtonClick(View view) {
+        Intent intent = new Intent(EditTaskActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
