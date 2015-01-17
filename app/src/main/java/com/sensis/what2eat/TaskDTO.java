@@ -20,31 +20,21 @@ public class TaskDTO {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     private String id;
     private String name;
-    private String phone;
-    private String address;
+    private String description;
 
-    public TaskDTO(String id, String name, String phone, String address) {
+    public TaskDTO(String id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.phone = phone;
-        this.address = address;
+        this.description = description;
     }
 }

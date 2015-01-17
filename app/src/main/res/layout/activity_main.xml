@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ready 2 Eat?"
+        android:background="#33b5e5"
+        android:layout_margin="8dp"
         android:id="@+id/ready2EatButton"
         android:onClick="onReady2EatButtonClick"
         android:layout_alignParentRight="true"

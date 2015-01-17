@@ -61,8 +61,8 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_add_task:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Add a Place");
-                builder.setMessage("What is the name of the place?");
+                builder.setTitle("Add an Entry");
+                builder.setMessage("What is the name?");
                 final EditText inputField = new EditText(this);
                 builder.setView(inputField);
                 builder.setPositiveButton("Add",

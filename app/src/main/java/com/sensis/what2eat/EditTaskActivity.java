@@ -34,8 +34,7 @@ public class EditTaskActivity extends ActionBarActivity {
 
         setContentView(R.layout.edit_task_view);
         ((EditText)findViewById(R.id.editName)).setText(task.getName());
-        ((EditText)findViewById(R.id.editPhone)).setText(task.getPhone());
-        ((EditText)findViewById(R.id.editAddress)).setText(task.getAddress());
+        ((EditText)findViewById(R.id.editDescription)).setText(task.getDescription());
     }
 
 
@@ -80,9 +79,8 @@ public class EditTaskActivity extends ActionBarActivity {
                     .show();
             return;
         }
-        String newPhone = ((EditText)findViewById(R.id.editPhone)).getText().toString();
-        String newAddress = ((EditText)findViewById(R.id.editAddress)).getText().toString();
-        helper.updateOneTask(new TaskDTO(id, newName, newPhone, newAddress));
+        String newDescription = ((EditText)findViewById(R.id.editDescription)).getText().toString();
+        helper.updateOneTask(new TaskDTO(id, newName, newDescription));
         new AlertDialog.Builder(EditTaskActivity.this)
                 .setTitle("Successfully Saved!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

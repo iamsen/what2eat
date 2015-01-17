@@ -13,7 +13,6 @@ public class TaskContract {
     public class Columns {
         public static final String TASK_NAME = "task_name";
         public static final String _ID = BaseColumns._ID;
-        public static final String PHONE_NUM = "phone_num";
-        public static final String ADDRESS = "address";
+        public static final String DESCRIPTION = "description";
     }
 }

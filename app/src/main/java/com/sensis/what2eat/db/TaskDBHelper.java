@@ -32,10 +32,9 @@ public class TaskDBHelper extends SQLiteOpenHelper {
         String sqlQuery =
                 String.format("CREATE TABLE %s ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "%s TEXT," +
-                                "%s TEXT," +
                                 "%s TEXT" +
                                 ");",
-                        TaskContract.TABLE, TaskContract.Columns.TASK_NAME, TaskContract.Columns.PHONE_NUM, TaskContract.Columns.ADDRESS);
+                        TaskContract.TABLE, TaskContract.Columns.TASK_NAME, TaskContract.Columns.DESCRIPTION);
         Log.d("TaskDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
     }
@@ -49,12 +48,12 @@ public class TaskDBHelper extends SQLiteOpenHelper {
     public TaskDTO getOneTask(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TaskContract.TABLE,
-                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK_NAME, TaskContract.Columns.PHONE_NUM, TaskContract.Columns.ADDRESS},
+                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK_NAME, TaskContract.Columns.DESCRIPTION},
                 String.format("%s = '%s'", TaskContract.Columns._ID, id),
                 null, null, null, null);
         cursor.moveToFirst();
 
-        return new TaskDTO(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+        return new TaskDTO(cursor.getString(0), cursor.getString(1), cursor.getString(2));
     }
 
     public void updateOneTask(TaskDTO task) {
@@ -63,8 +62,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
 
         values.clear();
         values.put(TaskContract.Columns.TASK_NAME, task.getName());
-        values.put(TaskContract.Columns.PHONE_NUM, task.getPhone());
-        values.put(TaskContract.Columns.ADDRESS, task.getAddress());
+        values.put(TaskContract.Columns.DESCRIPTION, task.getDescription());
 
         db.updateWithOnConflict(TaskContract.TABLE, values,
                 String.format("%s = '%s'", TaskContract.Columns._ID, task.getId()),
