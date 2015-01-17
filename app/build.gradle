@@ -11,6 +11,12 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file("/Users/sen.li/apps/sen-android-release.keystore")
+            keyAlias "kinder"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false

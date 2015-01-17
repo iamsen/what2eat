@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
         if (numPlaces < 1) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Can't generate the result...")
-                    .setMessage("Please enter at least one place...")
+                    .setMessage("Please enter at least one entry...")
                     .setPositiveButton("OK", null)
                     .show();
             return;
@@ -105,11 +105,12 @@ public class MainActivity extends ActionBarActivity {
 
         int pickedIndex = randInt(1, numPlaces);
         assert (pickedIndex >= 1);
+        assert (pickedIndex >= 1);
         cursor.moveToFirst();
         cursor.move(pickedIndex - 1);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("This is the place to go today!")
+        builder.setTitle("This is the one!")
                 .setMessage(cursor.getString(0))
                 .setPositiveButton("OK", null)
                 .show();

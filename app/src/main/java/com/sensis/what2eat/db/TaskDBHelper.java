@@ -33,8 +33,9 @@ public class TaskDBHelper extends SQLiteOpenHelper {
                 String.format("CREATE TABLE %s ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "%s TEXT," +
                                 "%s TEXT" +
+                                "%s TEXT" +
                                 ");",
-                        TaskContract.TABLE, TaskContract.Columns.TASK_NAME, TaskContract.Columns.DESCRIPTION);
+                        TaskContract.TABLE, TaskContract.Columns.TASK_NAME, TaskContract.Columns.DESCRIPTION, TaskContract.Columns.IS_ENABLE);
         Log.d("TaskDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
     }
